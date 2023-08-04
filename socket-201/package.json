@@ -1,12 +1,11 @@
 {
-  "name": "slackclone",
+  "name": "socket-201",
   "version": "1.0.0",
   "description": "",
   "main": "slack.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
