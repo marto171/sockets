@@ -1,0 +1,11 @@
+<script>
+  let ws = new WebSocket('ws://localhost:8000');
+
+  ws.addEventListener('message', function (message) {
+    console.log(message);
+  });
+
+  ws.addEventListener('open', function (e) {
+    ws.send('I am so excited, that I am connected to the server.');
+  });
+</script>
