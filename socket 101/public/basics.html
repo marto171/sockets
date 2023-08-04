@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basics</title>
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io('http://localhost:8000');
+      console.log(socket);
+
+      socket.on('connect', function (e) {
+        socket.emit('messageFromClient', { data: 'Hi! (from the client)' });
+      });
+
+      socket.on('messageFromServer', function (data) {
+        console.log(data);
+      });
+
+      //   socket.io.on('reconnect', function (data) {
+      //     console.log('reconnect happend');
+      //     console.log(data);
+      //   });
+    </script>
+  </body>
+</html>
