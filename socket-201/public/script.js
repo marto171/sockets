@@ -4,7 +4,14 @@
 const username = 'me';
 const password = 'me';
 
-const socket = io('http://localhost:9000');
+const clientOptions = {
+  auth: {
+    username,
+    password,
+  },
+};
+
+const socket = io('http://localhost:9000', clientOptions);
 // const socketWiki = io('http://localhost:9000/wiki');
 // const socketMozilla = io('http://localhost:9000/mozilla');
 // const socketLinux = io('http://localhost:9000/linux');
@@ -12,7 +19,25 @@ const socket = io('http://localhost:9000');
 const namespaceSockets = [];
 const listeners = {
   nsChange: [],
+  messageToRoom: [],
 };
+
+let selectedNsId = 0;
+document.querySelector('#message-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const newMessage = document.querySelector('#user-message').value;
+
+  namespaceSockets[selectedNsId].emit('newMessageToRoom', {
+    username,
+    avatar: 'https://via.placeholder.com/30',
+    newMessage,
+    date: Date.now(),
+    selectedNsId,
+  });
+
+  document.querySelector('#user-message').value = '';
+});
 
 const addListeners = nsId => {
   if (!listeners.nsChange[nsId]) {
@@ -21,8 +46,14 @@ const addListeners = nsId => {
     });
 
     listeners.nsChange[nsId] = true;
-  } else {
-    console.log('nothing added');
+  }
+
+  if (!listeners.messageToRoom[nsId]) {
+    namespaceSockets[nsId].on('messageToRoom', function (messageObj) {
+      document.querySelector('#messages').innerHTML += buildMessageHTML(messageObj);
+    });
+
+    listeners.messageToRoom[nsId] = true;
   }
 };
 
